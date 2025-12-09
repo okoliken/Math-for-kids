@@ -87,7 +87,7 @@ struct MathButtonBrandStyle: ButtonStyle {
             .foregroundColor(color)
             .padding(.vertical, 14)
             .padding(.horizontal, 16)
-            .frame(maxWidth: fullWidth ? .infinity : nil)
+            .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 52)
             .background(
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 14)

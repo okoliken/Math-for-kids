@@ -9,26 +9,19 @@ import SwiftUI
 
 
 struct ContentView: View {
+    @State private var showSplash = true
     
     var body: some View {
-        
         ZStack {
-            Image("Blue")
-                .ignoresSafeArea(.all)
-            
-            VStack(spacing: 20) {
-                Image("logo")
-                MathButton(label: "Go To Lessons!", brandStyle: .error) {}
-                MathButton(label: "Go To Lessons!") {}
-                MathButton(label: "Go To Lessons!", brandStyle: .lime) {}
-                MathButton(label: "Go To Lessons!", brandStyle: .secondary) {}
-                MathButton(label: "Go To Lessons!", brandStyle: .success, action: {})
-                MathButton(label: "Go To Lessons!", brandStyle: .warning, action: {})
-                MathButton(label: "Go To Lessons!", brandStyle: .fuchsia, action: {})
+            if showSplash {
+                SplashView(isActive: $showSplash)
+                    .transition(.opacity)
+            } else {
+                GetStarted()
+                    .transition(.opacity)
             }
         }
     }
-    
 }
 
 #Preview {

@@ -10,5 +10,12 @@
 		<string>Rubik-Italic-VariableFont_wght.ttf</string>
 		<string>Rubik-VariableFont_wght.ttf</string>
 	</array>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>brandContent</string>
+		<key>UIImageName</key>
+		<string>logo</string>
+	</dict>
 </dict>
 </plist>
