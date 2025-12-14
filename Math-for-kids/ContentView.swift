@@ -8,6 +8,7 @@
 import SwiftUI
 
 
+
 struct ContentView: View {
     @State private var showSplash = true
     
@@ -17,8 +18,13 @@ struct ContentView: View {
                 SplashView(isActive: $showSplash)
                     .transition(.opacity)
             } else {
-                GetStarted()
-                    .transition(.opacity)
+                
+                NavigationStack {
+                    AuthBackground {
+                        GetStarted()
+                    }
+                }
+                
             }
         }
     }

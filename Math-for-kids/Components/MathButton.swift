@@ -12,11 +12,11 @@ struct MathButton: View {
     let label: String
     var brandStyle: ButtonBrandStyle = .brand
     var fullWidth: Bool = false
-    let action: () -> Void
+    var action: (() -> Void)? = nil
    
     var body: some View {
         Button {
-            action()
+            action?()
         } label: {
             Text(label)
         }

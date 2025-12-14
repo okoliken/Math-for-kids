@@ -9,10 +9,9 @@ import SwiftUI
 
 struct SplashView: View {
   @State private var loadingProgress: CGFloat = 0.0
-  @State private var displayPercentage: Int = 0  // For visible counting
+  @State private var displayPercentage: Int = 0
   @Binding var isActive: Bool
   
-  // Entry animation states
   @State private var shineOpacity: Double = 0.0
   @State private var shineRotation: Double = -15.0
   @State private var logoScale: CGFloat = 0.0
@@ -24,7 +23,6 @@ struct SplashView: View {
       Color("brandContent")
         .ignoresSafeArea()
       
-      // Shine image from Figma (fades in with rotation)
       Image("Shine")
         .resizable()
         .interpolation(.high)
@@ -32,12 +30,11 @@ struct SplashView: View {
         .ignoresSafeArea()
         .opacity(shineOpacity)
         .rotationEffect(.degrees(shineRotation))
-        .drawingGroup() // Improves rendering performance
+        .drawingGroup()
 
       VStack {
         Spacer()
 
-        // Logo (pops in second)
         Image("splash-logo")
           .resizable()
           .scaledToFit()
@@ -47,7 +44,6 @@ struct SplashView: View {
 
         Spacer()
 
-        // Loading section at bottom (enters smoothly third)
         VStack(spacing: 12) {
           HStack(alignment: .center) {
             Text("Loading...")
