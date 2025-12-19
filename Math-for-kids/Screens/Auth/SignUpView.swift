@@ -73,6 +73,8 @@ struct SignUpView: View {
                     }
                     .buttonStyle(.plain)
                 }
+
+               
             }
         }
     }

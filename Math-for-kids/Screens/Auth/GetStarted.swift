@@ -22,9 +22,7 @@ struct GetStarted: View {
 
              AvatarGroup()
 
-              Text(
-                "Join thousands of young learners discovering the joy of numbers through fun games, challenges, and rewards. Every tap brings you closer to mastering math — the playful way!"
-              )
+              Text(AppTexts.Auth.getStartedDescription)
               .font(.Rubik(size: .lg))
               .foregroundColor(.textSecondary)
               .multilineTextAlignment(.center)

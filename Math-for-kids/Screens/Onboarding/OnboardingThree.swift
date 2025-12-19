@@ -12,15 +12,6 @@ struct OnboardingThree: View {
     var body: some View {
         VStack {
            Text("Onboarding Three")
-
-               HStack {
-                MathButton(label: "Previous") {
-                    onboardingManager.previousStep()
-                }
-                MathButton(label: "Next") {
-                    onboardingManager.nextStep()
-                }
-            }
         }
     }
 }

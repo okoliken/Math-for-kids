@@ -12,14 +12,7 @@ struct OnboardingTwo: View {
     var body: some View {
         VStack {
            Text("Onboarding Two")
-            HStack {
-                MathButton(label: "Previous") {
-                    onboardingManager.previousStep()
-                }
-                MathButton(label: "Next") {
-                    onboardingManager.nextStep()
-                }
-            }
+          
         }
     }
 }

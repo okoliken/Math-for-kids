@@ -1,6 +1,6 @@
 import SwiftUI
 
-enum OnBoardingSteps: Int, Identifiable {
+enum OnBoardingSteps: Int, CaseIterable {
     case welcome = 0
     case enterName = 1
     case niceToMeetYou = 2
@@ -9,7 +9,6 @@ enum OnBoardingSteps: Int, Identifiable {
     case whatIsYourGender = 5
     case startJourney = 6
 
-    var id: Int { self.rawValue }
 }
 
 @Observable
