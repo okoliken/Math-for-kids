@@ -10,7 +10,7 @@ import SwiftUI
 struct OnboardingSeven: View {
     var body: some View {
         ZStack {
-            // Onboarding step 7 content here
+           Text("Onboarding Seven")
         }
     }
 }

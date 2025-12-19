@@ -8,9 +8,18 @@
 import SwiftUI
 
 struct OnboardingTwo: View {
+    @Environment(ManageOnboarding.self) var onboardingManager
     var body: some View {
-        ZStack {
-            // Onboarding step 2 content here
+        VStack {
+           Text("Onboarding Two")
+            HStack {
+                MathButton(label: "Previous") {
+                    onboardingManager.previousStep()
+                }
+                MathButton(label: "Next") {
+                    onboardingManager.nextStep()
+                }
+            }
         }
     }
 }

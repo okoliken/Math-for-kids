@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GetStarted: View {
-  var body: some View {
+    var body: some View {
 
         VStack(spacing: 32) {
 
@@ -59,6 +59,6 @@ struct GetStarted: View {
 
 
 #Preview {
-  GetStarted()
+    GetStarted()
 }
 

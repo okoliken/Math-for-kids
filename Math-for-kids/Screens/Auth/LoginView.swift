@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct LoginView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -60,19 +60,19 @@ struct LoginView: View {
                     }
                 }
             }
+            .frame(maxWidth: 380)
             .padding()
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        self.dismiss()
+                        dismiss()
                     } label: {
                         Image("back-path-arrow")
                             .foregroundStyle(.white)
                     }
                     .buttonStyle(.plain)
                 }
-                .sharedBackgroundVisibility(.hidden)
             }
         }
     }

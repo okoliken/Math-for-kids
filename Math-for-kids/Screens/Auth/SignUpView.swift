@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct SignUpView: View {
-    @Environment(\.dismiss) private var dismiss
+    @Environment(\.dismiss) var dismiss
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -37,8 +37,8 @@ struct SignUpView: View {
                         )
                     }
                     
-                    Button {
-                        
+                    NavigationLink {
+                        OnboardingFlowView()
                     } label: {
                         Text("CREATE ACCOUNT!")
                     }
@@ -60,19 +60,19 @@ struct SignUpView: View {
                     }
                 }
             }
+            .frame(maxWidth: 380)
             .padding()
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {
                     Button {
-                        self.dismiss()
+                        dismiss()
                     } label: {
                         Image("back-path-arrow")
                             .foregroundStyle(.white)
                     }
                     .buttonStyle(.plain)
                 }
-                .sharedBackgroundVisibility(.hidden)
             }
         }
     }

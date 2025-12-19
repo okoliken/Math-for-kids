@@ -18,13 +18,11 @@ struct ContentView: View {
                 SplashView(isActive: $showSplash)
                     .transition(.opacity)
             } else {
-                
                 NavigationStack {
                     AuthBackground {
                         GetStarted()
                     }
                 }
-                
             }
         }
     }

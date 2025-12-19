@@ -17,7 +17,7 @@ struct AuthBackground<Content: View>: View {
     var body: some View {
         ZStack {
 
-            Image("Brand")
+          Image("Brand")
                 .resizable()
                 .scaledToFill()
                 .ignoresSafeArea()
