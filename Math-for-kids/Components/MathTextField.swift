@@ -12,6 +12,7 @@ struct MathTextField: View {
     @Binding var text: String
     var isSecure: Bool = false
     var placeholder: String = ""
+    var variant: Color = .surfacePrimary
     
     var body: some View {
         VStack(alignment: .leading, spacing: 8) {
@@ -40,7 +41,7 @@ struct MathTextField: View {
             .padding(.vertical, 14)
             .padding(.horizontal, 16)
             .frame(maxWidth: .infinity, minHeight: 52)
-            .background(Color(.surfacePrimary))
+            .background(variant)
             .overlay(
                 UnevenBorderShape(
                     cornerRadius: 12,

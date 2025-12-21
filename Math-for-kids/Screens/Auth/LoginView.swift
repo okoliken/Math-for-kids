@@ -26,14 +26,14 @@ struct LoginView: View {
                         MathTextField(
                             label: "Email",
                             text: $email,
-                            placeholder: "Enter your email"
+                            placeholder: "Enter your email",
                         )
                         
                         MathTextField(
                             label: "Password",
                             text: $password,
                             isSecure: true,
-                            placeholder: "Enter your password"
+                            placeholder: "Enter your password",
                         )
                     }
                     

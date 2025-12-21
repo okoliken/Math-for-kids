@@ -73,7 +73,6 @@ struct OnboardingProgressBar: View {
         }
         .padding(.horizontal, 20)
         .padding(.vertical, 12)
-        .background(Color.white)
         .opacity(isVisible ? 1 : 0)
         .offset(y: isVisible ? 0 : -40)
         .scaleEffect(isVisible ? 1 : 0.95)

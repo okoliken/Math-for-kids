@@ -61,7 +61,7 @@ struct SignUpView: View {
                 }
             }
             .frame(maxWidth: 380)
-            .padding()
+//            .padding()
             .navigationBarBackButtonHidden(true)
             .toolbar {
                 ToolbarItem(placement: .navigationBarLeading) {

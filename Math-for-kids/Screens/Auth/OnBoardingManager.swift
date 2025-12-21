@@ -11,6 +11,11 @@ enum OnBoardingSteps: Int, CaseIterable {
 
 }
 
+enum Gender: String, CaseIterable {
+    case boy = "boy"
+    case girl = "girl"
+}
+
 @Observable
 class ManageOnboarding {
     var currentStep: OnBoardingSteps = .welcome
@@ -18,7 +23,7 @@ class ManageOnboarding {
     // Data collection properties
     var childName: String = ""
     var childAge: Int?
-    var childGender: String = ""
+    var childGender: Gender? = nil
 
     func nextStep() {
         guard currentStep.rawValue < OnBoardingSteps.startJourney.rawValue else { return }

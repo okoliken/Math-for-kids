@@ -47,10 +47,11 @@ struct GetStarted: View {
               }
             }
           }
+          .padding()
           .frame(maxWidth: 380)  // Constrain the card width
-
+         
         }
-//        .padding()
+
       }
 
   }
