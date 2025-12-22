@@ -50,12 +50,12 @@ struct WhatIsYourGender: View {
                         .frame(width: 88, height: 88)
                         .overlay {
                             Circle()
-                                .stroke(selectedGender == .girl ? Color.successContent : Color.borderPrimary, lineWidth: 4)
+                                .stroke(selectedGender == .girl ? Color.fuchsiaContent : Color.borderPrimary, lineWidth: 4)
                                 .padding(-3)
                         }
                     Text("I'm a Girl")
                         .font(.LilitaOne(size: .md))
-                        .foregroundColor(selectedGender == .girl ? Color.successContent : .textSecondary)
+                        .foregroundColor(selectedGender == .girl ? Color.fuchsiaContent : .textSecondary)
                 }
                 .onTapGesture {
                     withAnimation {

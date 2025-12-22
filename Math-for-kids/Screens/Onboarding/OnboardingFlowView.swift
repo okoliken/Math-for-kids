@@ -10,6 +10,7 @@ import SwiftUI
 /// Main container view that manages the onboarding flow
 /// This view coordinates all 7 onboarding steps and manages the flow state
 struct OnboardingFlowView: View {
+    @Environment(AuthManager.self) var authManager
     @State private var onboardingManager = ManageOnboarding()
     
     var body: some View {
@@ -78,7 +79,8 @@ struct OnboardingFlowView: View {
                         }
                         else {
                             MathButton(label: "START JOURNEY!", fullWidth: true) {
-                                onboardingManager.nextStep()
+                                // Complete onboarding and authenticate user
+                                authManager.login()
                             }
                             .padding(.horizontal, 20)
                         }

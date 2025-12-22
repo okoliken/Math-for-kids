@@ -9,6 +9,7 @@ import SwiftUI
 
 struct SignUpView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(AuthManager.self) var authManager
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -39,6 +40,7 @@ struct SignUpView: View {
                     
                     NavigationLink {
                         OnboardingFlowView()
+                            .environment(authManager)
                     } label: {
                         Text("CREATE ACCOUNT!")
                     }

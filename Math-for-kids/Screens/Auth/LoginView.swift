@@ -9,6 +9,7 @@ import SwiftUI
 
 struct LoginView: View {
     @Environment(\.dismiss) var dismiss
+    @Environment(AuthManager.self) var authManager
     @State private var email: String = ""
     @State private var password: String = ""
     
@@ -38,7 +39,10 @@ struct LoginView: View {
                     }
                     
                     Button {
-                        
+                        // TODO: Implement actual login API call here
+                        // After successful login, call:
+                        authManager.login()
+                        dismiss()
                     } label: {
                         Text("LOGIN")
                     }

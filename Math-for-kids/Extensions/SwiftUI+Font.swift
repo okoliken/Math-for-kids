@@ -30,6 +30,7 @@ enum MathFontSizes {
         case md = 20
         case sm = 18
         case xsm = 16
+        case xxsm = 12
     }
     
     enum Body: CGFloat {
