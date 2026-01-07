@@ -6,6 +6,15 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		1F08DB4C2F05383C0086EB8B /* Auth in Frameworks */ = {isa = PBXBuildFile; productRef = 1F08DB4B2F05383C0086EB8B /* Auth */; };
+		1F08DB4E2F05383C0086EB8B /* Functions in Frameworks */ = {isa = PBXBuildFile; productRef = 1F08DB4D2F05383C0086EB8B /* Functions */; };
+		1F08DB502F05383C0086EB8B /* PostgREST in Frameworks */ = {isa = PBXBuildFile; productRef = 1F08DB4F2F05383C0086EB8B /* PostgREST */; };
+		1F08DB522F05383C0086EB8B /* Realtime in Frameworks */ = {isa = PBXBuildFile; productRef = 1F08DB512F05383C0086EB8B /* Realtime */; };
+		1F08DB542F05383C0086EB8B /* Storage in Frameworks */ = {isa = PBXBuildFile; productRef = 1F08DB532F05383C0086EB8B /* Storage */; };
+		1F1AA9CC2EF9369A00D19A48 /* ConfettiSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = 1F1AA9CB2EF9369A00D19A48 /* ConfettiSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		1F959DF02EE5893D0036AD0D /* Math-for-kids.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Math-for-kids.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +45,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1F08DB542F05383C0086EB8B /* Storage in Frameworks */,
+				1F08DB502F05383C0086EB8B /* PostgREST in Frameworks */,
+				1F08DB4E2F05383C0086EB8B /* Functions in Frameworks */,
+				1F08DB4C2F05383C0086EB8B /* Auth in Frameworks */,
+				1F08DB522F05383C0086EB8B /* Realtime in Frameworks */,
+				1F1AA9CC2EF9369A00D19A48 /* ConfettiSwiftUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +93,12 @@
 			);
 			name = "Math-for-kids";
 			packageProductDependencies = (
+				1F1AA9CB2EF9369A00D19A48 /* ConfettiSwiftUI */,
+				1F08DB4B2F05383C0086EB8B /* Auth */,
+				1F08DB4D2F05383C0086EB8B /* Functions */,
+				1F08DB4F2F05383C0086EB8B /* PostgREST */,
+				1F08DB512F05383C0086EB8B /* Realtime */,
+				1F08DB532F05383C0086EB8B /* Storage */,
 			);
 			productName = "Math-for-kids";
 			productReference = 1F959DF02EE5893D0036AD0D /* Math-for-kids.app */;
@@ -107,6 +128,10 @@
 			);
 			mainGroup = 1F959DE72EE5893D0036AD0D;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				1F1AA9CA2EF9369A00D19A48 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */,
+				1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 1F959DF12EE5893D0036AD0D /* Products */;
 			projectDirPath = "";
@@ -351,6 +376,58 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/supabase-community/supabase-swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.5.1;
+			};
+		};
+		1F1AA9CA2EF9369A00D19A48 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/simibac/ConfettiSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 2.0.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		1F08DB4B2F05383C0086EB8B /* Auth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Auth;
+		};
+		1F08DB4D2F05383C0086EB8B /* Functions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Functions;
+		};
+		1F08DB4F2F05383C0086EB8B /* PostgREST */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = PostgREST;
+		};
+		1F08DB512F05383C0086EB8B /* Realtime */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Realtime;
+		};
+		1F08DB532F05383C0086EB8B /* Storage */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F08DB4A2F05383C0086EB8B /* XCRemoteSwiftPackageReference "supabase-swift" */;
+			productName = Storage;
+		};
+		1F1AA9CB2EF9369A00D19A48 /* ConfettiSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 1F1AA9CA2EF9369A00D19A48 /* XCRemoteSwiftPackageReference "ConfettiSwiftUI" */;
+			productName = ConfettiSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 1F959DE82EE5893D0036AD0D /* Project object */;
 }

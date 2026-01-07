@@ -17,7 +17,6 @@ struct ContentView: View {
                 SplashView(isActive: $showSplash)
                     .transition(.opacity)
             } else {
-                // Show AppRoot if authenticated, GetStarted if not
                 if authManager.isAuthenticated {
                     AppRoot()
                         .environment(authManager)

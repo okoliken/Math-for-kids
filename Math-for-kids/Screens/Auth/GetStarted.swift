@@ -18,7 +18,7 @@ struct GetStarted: View {
             VStack(alignment: .center, spacing: 20) {
               Text("JOIN US!")
                 .font(.LilitaOne(size: .xlg))
-                .foregroundStyle(.textPrimary)
+                .foregroundStyle(Color.textPrimary)
 
              AvatarGroup()
 

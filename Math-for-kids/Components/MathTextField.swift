@@ -8,8 +8,9 @@
 import SwiftUI
 
 struct MathTextField: View {
-    let label: String
     @Binding var text: String
+
+    let label: String
     var isSecure: Bool = false
     var placeholder: String = ""
     var variant: Color = .surfacePrimary

@@ -21,8 +21,8 @@ struct EnterName: View {
                 .scaleEffect(isVisible ? 1 : 0.9)
             
             MathTextField(
-                label: "Your Name",
                 text: $name,
+                label: "Your Name",
                 placeholder: "Ex: Alex",
                 variant: .white
             )

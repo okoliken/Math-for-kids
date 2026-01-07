@@ -10,6 +10,7 @@ import SwiftUI
 struct StartJourney: View {
     @State private var isVisible = false
     
+    
     var body: some View {
         VStack(alignment: .center, spacing: 32) {
             Spacer()

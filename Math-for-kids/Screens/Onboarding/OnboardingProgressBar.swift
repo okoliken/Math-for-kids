@@ -19,7 +19,6 @@ struct OnboardingProgressBar: View {
     
     var body: some View {
         HStack(spacing: 16) {
-            // Close button (X)
             Button {
                 dismiss()
             } label: {
@@ -27,15 +26,11 @@ struct OnboardingProgressBar: View {
                     .foregroundStyle(.textPrimary)
                     .font(.system(size: 18, weight: .bold))
             }
-            
-            // Progress bar
+
             GeometryReader { geometry in
                 ZStack(alignment: .leading) {
-                    // Background: surface-primary (#F1F5F9)
                     RoundedRectangle(cornerRadius: 100)
                         .fill(Color.surfacePrimary)
-                    
-                    // Progress fill: warning-content (#FF8904)
                     let progressWidth = max(geometry.size.width * progress, 0)
                     if progressWidth > 0.5 {
                         RoundedRectangle(cornerRadius: 100)

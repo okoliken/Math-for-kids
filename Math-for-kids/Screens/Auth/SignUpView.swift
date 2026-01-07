@@ -12,6 +12,7 @@ struct SignUpView: View {
     @Environment(AuthManager.self) var authManager
     @State private var email: String = ""
     @State private var password: String = ""
+    @State private var showOnboarding = false
     
     var body: some View {
         AuthBackground {
@@ -23,24 +24,23 @@ struct SignUpView: View {
                     
                     AvatarGroup()
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         MathTextField(
-                            label: "Email",
                             text: $email,
+                            label: "Email",
                             placeholder: "Enter your email"
                         )
                         
                         MathTextField(
-                            label: "Password",
                             text: $password,
+                            label: "Password",
                             isSecure: true,
                             placeholder: "Enter your password"
                         )
                     }
                     
-                    NavigationLink {
-                        OnboardingFlowView()
-                            .environment(authManager)
+                    Button {
+                        showOnboarding = true
                     } label: {
                         Text("CREATE ACCOUNT!")
                     }
@@ -78,6 +78,10 @@ struct SignUpView: View {
 
                
             }
+        }
+        .fullScreenCover(isPresented: $showOnboarding) {
+            OnboardingFlowView()
+                .environment(authManager)
         }
     }
 }

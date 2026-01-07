@@ -23,16 +23,16 @@ struct LoginView: View {
                     
                     AvatarGroup()
                     
-                    VStack(spacing: 20) {
+                    VStack(spacing: 10) {
                         MathTextField(
-                            label: "Email",
                             text: $email,
+                            label: "Email",
                             placeholder: "Enter your email",
                         )
                         
                         MathTextField(
-                            label: "Password",
                             text: $password,
+                            label: "Password",
                             isSecure: true,
                             placeholder: "Enter your password",
                         )

@@ -5,13 +5,21 @@
 //  Created by Jeffery Okoli on 11/12/2025.
 //
 
+import ConfettiSwiftUI
 import SwiftUI
 
 /// Main container view that manages the onboarding flow
 /// This view coordinates all 7 onboarding steps and manages the flow state
 struct OnboardingFlowView: View {
     @Environment(AuthManager.self) var authManager
+    @Environment(\.dismiss) var dismiss
     @State private var onboardingManager = ManageOnboarding()
+    @State private var counter: Int = 0
+    
+    var isDayOne: Bool {
+        let currentstep = onboardingManager.currentStep
+        return currentstep == .dayOneStreak
+    }
     
     var body: some View {
         ZStack {
@@ -19,7 +27,7 @@ struct OnboardingFlowView: View {
                 .ignoresSafeArea()
             VStack(spacing: 0) {
                 // Progress bar header
-                if !onboardingManager.isLastStep() {
+                if !onboardingManager.isLastStep() && !isDayOne {
                     OnboardingProgressBar(manager: onboardingManager)
                 }
                 // Content
@@ -46,14 +54,14 @@ struct OnboardingFlowView: View {
                         case .startJourney:
                             StartJourney()
                                 .environment(onboardingManager)
+                        case .dayOneStreak:
+                            DayOneStreak()
+                                .environment(onboardingManager)
                     }
                 }
                 
                 Spacer()
                 
-                // Control buttons based on step
-              
-        
             }
             .safeAreaInset(edge: .bottom) {
                 VStack(spacing: 0) {
@@ -71,20 +79,31 @@ struct OnboardingFlowView: View {
                         .padding(.horizontal, 20)
                     } else {
                         // Steps 1, 3, 5, 7: Continue button full width
-                        if !onboardingManager.isLastStep() {
+                        if isDayOne {
+                            // isDayOne step: Continue button routes to HomeTabView
                             MathButton(label: "Continue", fullWidth: true) {
+                                dismiss()
+                                
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    authManager.login()
+                                }
+                             
+                            }
+                            .padding(.horizontal, 20)
+                        }
+                        else if onboardingManager.isLastStep() {
+                            MathButton(label: "START JOURNEY!", fullWidth: true) {
                                 onboardingManager.nextStep()
                             }
                             .padding(.horizontal, 20)
                         }
                         else {
-                            MathButton(label: "START JOURNEY!", fullWidth: true) {
-                                // Complete onboarding and authenticate user
-                                authManager.login()
+                            MathButton(label: "Continue", fullWidth: true) {
+                                onboardingManager.nextStep()
                             }
                             .padding(.horizontal, 20)
                         }
-
+                        
                     }
                 }
             }

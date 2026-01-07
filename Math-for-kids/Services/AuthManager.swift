@@ -14,7 +14,7 @@ import SwiftUI
 class AuthManager {
     /// Set to true when user is authenticated, false when logged out
     /// TODO: Replace with actual authentication check (e.g., check for valid session token, user defaults, etc.)
-    var isAuthenticated: Bool = true
+    var isAuthenticated: Bool = false
     
     /// Call this method when user successfully logs in
     func login() {

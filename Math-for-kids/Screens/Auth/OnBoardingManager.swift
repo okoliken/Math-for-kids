@@ -8,7 +8,7 @@ enum OnBoardingSteps: Int, CaseIterable {
     case clarifyLastQuestion = 4
     case whatIsYourGender = 5
     case startJourney = 6
-
+    case dayOneStreak = 7
 }
 
 enum Gender: String, CaseIterable {
@@ -26,7 +26,7 @@ class ManageOnboarding {
     var childGender: Gender? = nil
 
     func nextStep() {
-        guard currentStep.rawValue < OnBoardingSteps.startJourney.rawValue else { return }
+        guard currentStep.rawValue < OnBoardingSteps.dayOneStreak.rawValue else { return }
         currentStep = OnBoardingSteps(rawValue: currentStep.rawValue + 1) ?? .welcome
     }
 
