@@ -12,6 +12,7 @@ struct MathButton: View {
     let label: String
     var brandStyle: ButtonBrandStyle = .brand
     var fullWidth: Bool = false
+    var minHeight: CGFloat = 52
     var action: (() -> Void)? = nil
    
     var body: some View {
@@ -20,7 +21,7 @@ struct MathButton: View {
         } label: {
             Text(label)
         }
-        .buttonStyle(MathButtonBrandStyle(style: brandStyle, fullWidth: fullWidth))
+        .buttonStyle(MathButtonBrandStyle(style: brandStyle, fullWidth: fullWidth, minHeight: minHeight))
     }
     
 }
@@ -76,6 +77,7 @@ enum ButtonBrandStyle {
 struct MathButtonBrandStyle: ButtonStyle {
     let style: ButtonBrandStyle
     var fullWidth: Bool = false
+    var minHeight: CGFloat = 52
     
     var color: Color {
         return style == .secondary ? .textPrimary : .white
@@ -87,7 +89,7 @@ struct MathButtonBrandStyle: ButtonStyle {
             .foregroundColor(color)
             .padding(.vertical, 14)
             .padding(.horizontal, 16)
-            .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: 52)
+            .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: minHeight)
             .background(
                 ZStack(alignment: .bottom) {
                     RoundedRectangle(cornerRadius: 14)

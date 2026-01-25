@@ -10,12 +10,8 @@ import SwiftUI
 struct HomeTopBar: View {
     let userName: String
     let coinBalance: Int
-    let safeAreaTop: CGFloat
     
     var body: some View {
-        let contentHeight: CGFloat = 90 // Base content height (avatar + padding)
-        let calculatedHeight = safeAreaTop + contentHeight
-        
         HStack(alignment: .center, spacing: 12) {
                 // Left side - Avatar and name
                 HStack(spacing: 8) {
@@ -42,9 +38,7 @@ struct HomeTopBar: View {
                         .fontWeight(.bold)
                         .foregroundStyle(.textPrimary)
                     
-                    Button {
-                        // Add coins action
-                    } label: {
+                    NavigationLink(value: NavigationRoute.store) {
                         Image("Add")
                             .foregroundColor(.green)
                             .font(.title3)
@@ -61,9 +55,9 @@ struct HomeTopBar: View {
             .clipShape(RoundedRectangle(cornerRadius: 100))
         }
         .padding(.horizontal, 20)
-        .padding(.top, safeAreaTop + 50)
+        .padding(.top, 50)
         .padding(.bottom, 12)
-        .frame(height: calculatedHeight + 20)
+        .frame(height: 110)
         .background(Color.white)
         .clipShape(BottomRoundedRectangle(cornerRadius: 24))
         .overlay(alignment: .bottom) {

@@ -8,7 +8,6 @@
 import SwiftUI
 
 struct EnterName: View {
-    @Environment(ManageOnboarding.self) var onboardingManager
     @State var name: String = ""
     @State private var isVisible = false
     

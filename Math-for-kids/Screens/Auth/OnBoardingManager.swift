@@ -20,7 +20,6 @@ enum Gender: String, CaseIterable {
 class ManageOnboarding {
     var currentStep: OnBoardingSteps = .welcome
     
-    // Data collection properties
     var childName: String = ""
     var childAge: Int?
     var childGender: Gender? = nil
