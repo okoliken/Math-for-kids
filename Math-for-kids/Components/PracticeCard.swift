@@ -15,7 +15,10 @@ struct PracticeCard: View {
     let surfaceColor: Color
     let borderLightColor: Color
     let imageName: String
-    
+    let totalLevels: Int
+    let completedLevels: Int
+    let questionsPerLevel: Int
+
     init(
         title: String,
         description: String = "Complete levels and earn XP, up your rank",
@@ -23,7 +26,10 @@ struct PracticeCard: View {
         buttonBrandStyle: ButtonBrandStyle = .brand,
         surfaceColor: Color,
         borderLightColor: Color,
-        imageName: String
+        imageName: String,
+        totalLevels: Int = 30,
+        completedLevels: Int = 0,
+        questionsPerLevel: Int = 5
     ) {
         self.title = title
         self.description = description
@@ -32,8 +38,26 @@ struct PracticeCard: View {
         self.surfaceColor = surfaceColor
         self.borderLightColor = borderLightColor
         self.imageName = imageName
+        self.totalLevels = totalLevels
+        self.completedLevels = completedLevels
+        self.questionsPerLevel = questionsPerLevel
     }
-    
+
+    /// The subject this card opens when its level button is tapped.
+    private var subject: Subject {
+        Subject(
+            title: title,
+            description: description,
+            imageName: imageName,
+            surfaceColor: surfaceColor,
+            borderLightColor: borderLightColor,
+            buttonBrandStyle: buttonBrandStyle,
+            totalLevels: totalLevels,
+            completedLevels: completedLevels,
+            questionsPerLevel: questionsPerLevel
+        )
+    }
+
     var body: some View {
         ZStack(alignment: .bottomTrailing) {
             RoundedRectangle(cornerRadius: 16)
@@ -54,13 +78,16 @@ struct PracticeCard: View {
                     .foregroundStyle(.textPrimary)
                 
                 Text(description)
-                    .font(.Rubik(size: .md))
+                    .font(.Rubik(size: .md)).fontWeight(.semibold)
                     .foregroundStyle(.textSecondary)
                     .frame(width: 200)
                     .lineSpacing(3)
                 
-                MathButton(label: buttonLabel, brandStyle: buttonBrandStyle)
-                    .padding(.top, 8)
+                NavigationLink(value: NavigationRoute.subjectDetail(subject)) {
+                    Text(buttonLabel)
+                }
+                .buttonStyle(MathButtonBrandStyle(style: buttonBrandStyle))
+                .padding(.top, 16)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
             .padding()

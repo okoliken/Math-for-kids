@@ -25,19 +25,14 @@ struct HomeTabView: View {
                 MathScrollView(.vertical, showsIndicators: false) {
                     VStack(alignment: .leading, spacing: 18) {
                         ZStack(alignment: .topLeading) {
-                            RoundedRectangle(cornerRadius: 16)
-                                .fill(Color.surfacePrimary)
-                                .frame(maxWidth: .infinity, minHeight: 202)
-                                .overlay(
-                                    UnevenBorderShape(
+                            RoundedRectangle(cornerRadius: 16).fill(Color.surfacePrimary)
+                                .cardSurface(
                                         cornerRadius: 12,
                                         borderWidths: .init(top: 2, leading: 2, bottom: 4, trailing: 2)
                                     )
-                                    .fill(Color(.borderPrimary), style: FillStyle(eoFill: true))
-                                )
-                                .clipShape(RoundedRectangle(cornerRadius: 16))
+        
                             
-                            VStack(spacing: 24){
+                            VStack(spacing: 22){
                                 HStack(spacing: 16){
                                     Image("learning")
                                     VStack(alignment: .leading, spacing: 4) {
@@ -48,9 +43,7 @@ struct HomeTabView: View {
                                             
                                             Spacer()
                                             
-                                            Button {
-                                                
-                                            } label: {
+                                            NavigationLink(value: NavigationRoute.streak) {
                                                 Image("arrow-right")
                                             }
                                         }
@@ -76,51 +69,56 @@ struct HomeTabView: View {
                                         .frame(maxWidth: .infinity)
                                     }
                                 }
-                                .padding(.horizontal, 16)
+//                                .padding(.horizontal, 16)
                             }
                             .padding()
 
                         }
-                        HStack(alignment: .center, spacing: 16) {
+                        HStack(alignment: .center, spacing: 6) {
                             Image("streakIcon")
                             Text("Start Practice")
                                 .font(.LilitaOne(size: .xlg))
                                 .foregroundStyle(Color(.brandContent))
                         }
+                        .padding(.horizontal, 10)
                         
                         PracticeCard(
                             title: "Addition",
                             buttonLabel: "Level 1",
                             surfaceColor: Color(.surfaceBrand),
                             borderLightColor: Color.borderBrandLight,
-                            imageName: "brand"
+                            imageName: "brand",
+                            completedLevels: 0
                         )
-                        
+
                         PracticeCard(
                             title: "Subtraction",
                             buttonLabel: "Level 4",
                             buttonBrandStyle: .lime,
                             surfaceColor: Color(.surfaceLime),
                             borderLightColor: Color.borderLimeLight,
-                            imageName: "lime"
+                            imageName: "lime",
+                            completedLevels: 3
                         )
-                        
+
                         PracticeCard(
                             title: "Multiplication",
                             buttonLabel: "Level 4",
                             buttonBrandStyle: .fuchsia,
                             surfaceColor: Color(.surfaceFushia),
                             borderLightColor: Color.borderFushiaLight,
-                            imageName: "fushia"
+                            imageName: "fushia",
+                            completedLevels: 3
                         )
-                        
+
                         PracticeCard(
                             title: "Division",
                             buttonLabel: "Level 6",
                             buttonBrandStyle: .warning,
                             surfaceColor: Color(.surfaceOrange),
                             borderLightColor: Color.borderOrangeLight,
-                            imageName: "orange"
+                            imageName: "orange",
+                            completedLevels: 5
                         )
                         
                         Spacer()
@@ -139,10 +137,12 @@ struct HomeTabView: View {
             .toolbar(.hidden, for: .navigationBar)
             .navigationDestination(for: NavigationRoute.self) { route in
                 switch route {
-                case .store:
-                    StoreView()
-                default:
-                    EmptyView()
+                    case .store:
+                        StoreView()
+                    case .streak:
+                        StreakView()
+                    case .subjectDetail(let subject):
+                        SubjectDetailView(subject: subject)
                 }
             }
             .ignoresSafeArea()

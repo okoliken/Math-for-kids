@@ -26,5 +26,6 @@ struct MathScrollView<Content: View>: View {
         ScrollView(axis, showsIndicators: showsIndicators) {
             content()
         }
+        
     }
 }

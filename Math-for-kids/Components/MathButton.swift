@@ -13,15 +13,16 @@ struct MathButton: View {
     var brandStyle: ButtonBrandStyle = .brand
     var fullWidth: Bool = false
     var minHeight: CGFloat = 52
+    var fontSize: MathFontSizes.Display = .xsm
     var action: (() -> Void)? = nil
-   
+
     var body: some View {
         Button {
             action?()
         } label: {
             Text(label)
         }
-        .buttonStyle(MathButtonBrandStyle(style: brandStyle, fullWidth: fullWidth, minHeight: minHeight))
+        .buttonStyle(MathButtonBrandStyle(style: brandStyle, fullWidth: fullWidth, minHeight: minHeight, fontSize: fontSize))
     }
     
 }
@@ -78,24 +79,25 @@ struct MathButtonBrandStyle: ButtonStyle {
     let style: ButtonBrandStyle
     var fullWidth: Bool = false
     var minHeight: CGFloat = 52
-    
+    var fontSize: MathFontSizes.Display = .xsm
+
     var color: Color {
         return style == .secondary ? .textPrimary : .white
     }
-    
+
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.LilitaOne(size: .xsm))
+            .font(.LilitaOne(size: fontSize))
             .foregroundColor(color)
             .padding(.vertical, 14)
             .padding(.horizontal, 16)
             .frame(maxWidth: fullWidth ? .infinity : nil, minHeight: minHeight)
             .background(
                 ZStack(alignment: .bottom) {
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: 12)
                         .fill(style.borderColor)
                         .offset(y: 3)
-                    RoundedRectangle(cornerRadius: 14)
+                    RoundedRectangle(cornerRadius: 12)
                         .fill(style.contentColor)
                 }
             )

@@ -9,30 +9,15 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showSplash = true
-    @State private var authManager = AuthManager()
-    
+
     var body: some View {
         ZStack {
             if showSplash {
                 SplashView(isActive: $showSplash)
                     .transition(.opacity)
             } else {
-                if authManager.isAuthenticated {
-                    AppRoot()
-                        .environment(authManager)
-                } else {
-                    NavigationStack {
-                        AuthBackground {
-                            GetStarted()
-                        }
-                    }
-                    .environment(authManager)
-                }
+                AppRoot()
             }
-        }
-        .onAppear {
-            // Check authentication status when app appears
-            authManager.checkAuthenticationStatus()
         }
     }
 }

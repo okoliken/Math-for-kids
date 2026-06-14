@@ -29,9 +29,7 @@ struct AppRoot: View {
     
     /// Controls bottom tab bar visibility. Child views can modify this via environment.
     @State private var isTabBarVisible = true
-    
-    @State var navigationtModel = NavigationViewModel()
-    
+
     var body: some View {
         ZStack(alignment: .bottom) {
             // MARK: - Tab Content Views

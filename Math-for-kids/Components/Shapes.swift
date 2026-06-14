@@ -7,6 +7,39 @@
 
 import SwiftUI
 
+/// A border ring with independently sized edges.
+/// Fill with `FillStyle(eoFill: true)` to render only the border (the area
+/// between the outer rounded rectangle and the inset inner rounded rectangle).
+struct UnevenBorderShape: Shape {
+    var cornerRadius: CGFloat
+    var borderWidths: EdgeInsets
+
+    func path(in rect: CGRect) -> Path {
+        var path = Path()
+
+        // Outer rounded rectangle
+        path.addRoundedRect(
+            in: rect,
+            cornerSize: CGSize(width: cornerRadius, height: cornerRadius)
+        )
+
+        // Inner rounded rectangle, inset by each edge's border width
+        let innerRect = CGRect(
+            x: rect.minX + borderWidths.leading,
+            y: rect.minY + borderWidths.top,
+            width: max(0, rect.width - borderWidths.leading - borderWidths.trailing),
+            height: max(0, rect.height - borderWidths.top - borderWidths.bottom)
+        )
+        let innerRadius = max(0, cornerRadius - min(borderWidths.leading, borderWidths.top))
+        path.addRoundedRect(
+            in: innerRect,
+            cornerSize: CGSize(width: innerRadius, height: innerRadius)
+        )
+
+        return path
+    }
+}
+
 struct TopBorderShape: Shape {
     var cornerRadius: CGFloat
     var borderWidth: CGFloat
