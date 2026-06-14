@@ -7,20 +7,18 @@
 
 import SwiftUI
 
-/// Subject detail: a themed header (title, progress) over a scrollable
-/// ladder of levels, each playable or locked based on progress.
 struct SubjectDetailView: View {
-    /// Binding to control bottom tab bar visibility from AppRoot
     @Environment(\.tabBarVisible) private var tabBarVisible
 
     let subject: Subject
 
-    /// The level whose play button was tapped — drives the difficulty modal.
     @State private var playLevel: Level?
+
+    /// A started practice run — pushes `PracticeView` once a difficulty is chosen.
+    @State private var session: PracticeSession?
 
     var body: some View {
         VStack(spacing: 0) {
-            // Sticky header — stays put (and on top) while the level list scrolls.
             SubjectDetailHeader(subject: subject)
                 .zIndex(1)
 
@@ -33,34 +31,34 @@ struct SubjectDetailView: View {
         .ignoresSafeArea(edges: .top) // let the header extend under the status bar
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        // Hide the bottom tab bar while this pushed screen is visible.
-        .onDisappear {
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                tabBarVisible.wrappedValue = true
-            }
-        }
-        // Difficulty picker — pops in when a level's play button is tapped.
         .overlay {
             if playLevel != nil {
                 DifficultyModal(
-                    onCancel: { dismissModal() },
-                    onStart: { _ in
-                        dismissModal()
+                    // Cancel returns to the level list — restore the tab bar.
+                    onCancel: {
+                        playLevel = nil
+                        setTabBar(visible: true)
+                    },
+                    // Start pushes the practice screen — keep the tab bar hidden
+                    // so it doesn't flash back in behind the push.
+                    onStart: { difficulty in
+                        playLevel = nil
+                        session = PracticeSession(subject: subject, difficulty: difficulty)
                     }
                 )
             }
         }
-        .animation(.spring(response: 0.5, dampingFraction: 0.62), value: playLevel)
-        // Tuck the bottom tab bar away while the modal is up so it's covered.
-        .onChange(of: playLevel) { _, newValue in
-            withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
-                tabBarVisible.wrappedValue = (newValue == nil)
-            }
+        .navigationDestination(item: $session) { session in
+            PracticeView(subject: session.subject, difficulty: session.difficulty)
         }
+        .animation(.spring(response: 0.5, dampingFraction: 0.62), value: playLevel)
     }
 
-    private func dismissModal() {
-        playLevel = nil
+    /// Animated tab-bar visibility toggle, matching the rest of the app.
+    private func setTabBar(visible: Bool) {
+        withAnimation(.spring(response: 0.3, dampingFraction: 0.8)) {
+            tabBarVisible.wrappedValue = visible
+        }
     }
 
     // MARK: - Levels List
@@ -69,6 +67,8 @@ struct SubjectDetailView: View {
             ForEach(Array(subject.levels.enumerated()), id: \.element.id) { index, level in
                 LevelRow(level: level, brandStyle: subject.buttonBrandStyle) {
                     playLevel = level
+                    // Tuck the tab bar away so the difficulty modal covers cleanly.
+                    setTabBar(visible: false)
                 }
                 .staggeredAppear(index)
             }

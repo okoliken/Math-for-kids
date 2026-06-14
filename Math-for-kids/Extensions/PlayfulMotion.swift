@@ -15,6 +15,46 @@ extension View {
     func staggeredAppear(_ index: Int, baseDelay: Double = 0.06) -> some View {
         modifier(StaggeredAppear(index: index, baseDelay: baseDelay))
     }
+
+    /// A quick side-to-side wiggle that fires whenever `trigger` flips to `true`
+    /// — a friendly "look here!" jitter to draw a child's eye to a button.
+    func wiggle(trigger: Bool) -> some View {
+        modifier(Wiggle(trigger: trigger))
+    }
+}
+
+/// Drives a horizontal shake by oscillating a sine wave as `animatableData`
+/// sweeps 0 → 1, returning to centre at the end.
+private struct ShakeEffect: GeometryEffect {
+    /// Maximum horizontal travel, in points.
+    var travel: CGFloat = 7
+    /// Number of full back-and-forth shakes.
+    var shakes: CGFloat = 3
+    var animatableData: CGFloat
+
+    func effectValue(size: CGSize) -> ProjectionTransform {
+        let dx = travel * sin(animatableData * .pi * shakes)
+        return ProjectionTransform(CGAffineTransform(translationX: dx, y: 0))
+    }
+}
+
+private struct Wiggle: ViewModifier {
+    let trigger: Bool
+    @State private var shake: CGFloat = 0
+
+    func body(content: Content) -> some View {
+        content
+            .modifier(ShakeEffect(animatableData: shake))
+            .onChange(of: trigger) { _, isOn in
+                if isOn { fire() }
+            }
+            .onAppear { if trigger { fire() } }
+    }
+
+    private func fire() {
+        shake = 0
+        withAnimation(.easeInOut(duration: 0.5)) { shake = 3 }
+    }
 }
 
 private struct StaggeredAppear: ViewModifier {
