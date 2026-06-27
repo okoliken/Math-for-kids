@@ -53,12 +53,13 @@ struct SubjectDetailHeader: View {
                 ProgressBar(
                     value: Double(subject.completedLevels) / Double(max(subject.totalLevels, 1)),
                     fillColor: subject.buttonBrandStyle.contentColor,
-                    surfaceColor: subject.surfaceColor
+                    surfaceColor: subject.surfaceColor,
+                    borderColor: .white
                 )
                 .frame(height: 16)
                 .padding(.top, 4)
             }
-            .padding(20)
+            .padding()
             .padding(.top, 60) // status bar / notch space
             .frame(maxWidth: .infinity, alignment: .leading)
         }

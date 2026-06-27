@@ -17,23 +17,45 @@ enum Difficulty: String, CaseIterable, Identifiable {
 
 /// Difficulty picker shown before starting a level. Presented as a playful
 /// pop-in card over a dimmed backdrop.
+///
+/// The modal drives its own entrance and exit animation from `appeared`
+/// (rather than relying on a `.transition` at the call site, which doesn't fire
+/// reliably for conditionally-inserted overlay content). It pops in on appear,
+/// and on dismiss it animates out *first*, then calls back so the parent can
+/// remove it from the hierarchy.
 struct DifficultyModal: View {
     var onCancel: () -> Void
     var onStart: (Difficulty) -> Void
 
     @State private var selected: Difficulty = .easy
+    @State private var appeared = false
+
+    private let popAnimation: Animation = .spring(response: 0.42, dampingFraction: 0.72)
+    private let dismissDuration: Double = 0.25
 
     var body: some View {
         ZStack {
             // Dimmed backdrop — tap outside to cancel.
-            Color.black.opacity(0.64)
+            Color.black.opacity(appeared ? 0.64 : 0)
                 .ignoresSafeArea()
-                .transition(.opacity)
-                .onTapGesture { onCancel() }
+                .onTapGesture { dismiss(then: onCancel) }
 
             card
                 .padding(.horizontal, 32)
-                .transition(.scale(scale: 0.8).combined(with: .opacity))
+                .scaleEffect(appeared ? 1 : 0.85)
+                .opacity(appeared ? 1 : 0)
+        }
+        .onAppear {
+            withAnimation(popAnimation) { appeared = true }
+        }
+    }
+
+    /// Animates the modal out, then runs `action` (e.g. to clear the parent's
+    /// presentation state) once the exit animation has finished.
+    private func dismiss(then action: @escaping () -> Void) {
+        withAnimation(.easeInOut(duration: dismissDuration)) { appeared = false }
+        DispatchQueue.main.asyncAfter(deadline: .now() + dismissDuration) {
+            action()
         }
     }
 
@@ -70,10 +92,11 @@ struct DifficultyModal: View {
 
             HStack(spacing: 16) {
                 MathButton(label: "Cancel", brandStyle: .secondary, fullWidth: true, minHeight: 44) {
-                    onCancel()
+                    dismiss(then: onCancel)
                 }
                 MathButton(label: "Start", fullWidth: true, minHeight: 44) {
-                    onStart(selected)
+                    let difficulty = selected
+                    dismiss { onStart(difficulty) }
                 }
             }
             .padding(.bottom, 24)

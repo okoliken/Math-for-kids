@@ -5,20 +5,29 @@
 //  Created by Jeffery Okoli on 22/12/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 struct HomeTabView: View {
-    // Array of days with their active states
-    let weekDays: [(day: String, isActive: Bool)] = [
-        ("Mon", true),
-        ("Tue", false),
-        ("Wed", false),
-        ("Thu", false),
-        ("Fri", false),
-        ("Sat", false),
-        ("Sun", false)
-    ]
-    
+    @Query private var progresses: [SubjectProgress]
+    @Query private var practiceDays: [PracticeDay]
+    @Query private var wallets: [Wallet]
+
+    /// The current coin balance, shown in the top bar.
+    private var coinBalance: Int { wallets.first?.coins ?? 0 }
+
+    /// Current streak length and the Mon–Sun strip, both derived from practice days.
+    private var streakCount: Int { ProgressStore.streak(from: practiceDays) }
+    private var weekDays: [(day: String, isActive: Bool)] { ProgressStore.currentWeek(from: practiceDays) }
+
+    /// Subjects from the catalog with their stored level progress applied.
+    private var subjects: [Subject] {
+        Subject.catalog.map { subject in
+            let completed = progresses.first { $0.subjectID == subject.id }?.completedLevels ?? 0
+            return subject.withCompletedLevels(completed)
+        }
+    }
+
     var body: some View {
         NavigationStack {
             ZStack(alignment: .top) {
@@ -37,7 +46,7 @@ struct HomeTabView: View {
                                     Image("learning")
                                     VStack(alignment: .leading, spacing: 4) {
                                         HStack(alignment: .center){
-                                            Text("1 day")
+                                            Text("\(streakCount) day\(streakCount == 1 ? "" : "s")")
                                                 .font(.LilitaOne(size: .lg))
                                                 .foregroundStyle(Color(.warningContent))
                                             
@@ -46,6 +55,7 @@ struct HomeTabView: View {
                                             NavigationLink(value: NavigationRoute.streak) {
                                                 Image("arrow-right")
                                             }
+                                            .buttonStyle(PressableButtonStyle())
                                         }
                                         Text("Complete practice or tutorial")
                                             .font(.Rubik(size: .md))
@@ -82,44 +92,9 @@ struct HomeTabView: View {
                         }
                         .padding(.horizontal, 10)
                         
-                        PracticeCard(
-                            title: "Addition",
-                            buttonLabel: "Level 1",
-                            surfaceColor: Color(.surfaceBrand),
-                            borderLightColor: Color.borderBrandLight,
-                            imageName: "brand",
-                            completedLevels: 0
-                        )
-
-                        PracticeCard(
-                            title: "Subtraction",
-                            buttonLabel: "Level 4",
-                            buttonBrandStyle: .lime,
-                            surfaceColor: Color(.surfaceLime),
-                            borderLightColor: Color.borderLimeLight,
-                            imageName: "lime",
-                            completedLevels: 3
-                        )
-
-                        PracticeCard(
-                            title: "Multiplication",
-                            buttonLabel: "Level 4",
-                            buttonBrandStyle: .fuchsia,
-                            surfaceColor: Color(.surfaceFushia),
-                            borderLightColor: Color.borderFushiaLight,
-                            imageName: "fushia",
-                            completedLevels: 3
-                        )
-
-                        PracticeCard(
-                            title: "Division",
-                            buttonLabel: "Level 6",
-                            buttonBrandStyle: .warning,
-                            surfaceColor: Color(.surfaceOrange),
-                            borderLightColor: Color.borderOrangeLight,
-                            imageName: "orange",
-                            completedLevels: 5
-                        )
+                        ForEach(subjects) { subject in
+                            PracticeCard(subject: subject)
+                        }
                         
                         Spacer()
                             .frame(height: 80)
@@ -131,7 +106,7 @@ struct HomeTabView: View {
                 
                 HomeTopBar(
                     userName: "Alex",
-                    coinBalance: 99000
+                    coinBalance: coinBalance
                 )
             }
             .toolbar(.hidden, for: .navigationBar)

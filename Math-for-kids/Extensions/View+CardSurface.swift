@@ -8,8 +8,6 @@
 import SwiftUI
 
 extension View {
-    /// Applies the app's standard bordered card surface: a filled rounded
-    /// rectangle with the uneven (heavier-bottom) border used throughout the app.
     func cardSurface(
         cornerRadius: CGFloat = 12,
         borderWidths: EdgeInsets = .init(top: 2, leading: 2, bottom: 4, trailing: 2),

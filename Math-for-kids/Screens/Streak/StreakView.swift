@@ -5,6 +5,7 @@
 //  Created by Jeffery Okoli on 13/06/2026.
 //
 
+import SwiftData
 import SwiftUI
 
 struct StreakView: View {
@@ -13,42 +14,49 @@ struct StreakView: View {
     /// Binding to control bottom tab bar visibility from AppRoot
     @Environment(\.tabBarVisible) private var tabBarVisible
 
-    /// Current streak length in days
-    var streakCount: Int = 1
+    @Query private var practiceDays: [PracticeDay]
 
-    /// Per-day activity for the current week
-    var weekDays: [(day: String, isActive: Bool)] = [
-        ("Mon", true),
-        ("Tue", false),
-        ("Wed", false),
-        ("Thu", false),
-        ("Fri", false),
-        ("Sat", false),
-        ("Sun", false)
-    ]
+    /// Current streak length in days, derived from practiced days.
+    private var streakCount: Int { ProgressStore.streak(from: practiceDays) }
 
-    /// The most recent `streakCount` days, used to light up the calendar.
-    private var activeDates: Set<Date> {
-        let calendar = Calendar(identifier: .gregorian)
-        let today = calendar.startOfDay(for: Date())
-        let dates = (0..<max(streakCount, 0)).compactMap {
-            calendar.date(byAdding: .day, value: -$0, to: today)
-        }
-        return Set(dates)
-    }
+    /// Practiced days, used to light up the calendar.
+    private var activeDates: Set<Date> { ProgressStore.activeDateSet(from: practiceDays) }
 
     var body: some View {
-        MathScrollView(.vertical, showsIndicators: false) {
-            VStack(spacing: 24) {
-               streakCard
-
-               StreakStatusCard(
-                    streakCount: streakCount,
-                    activeDates: activeDates
-               )
+        VStack {
+            HStack {
+                Button {
+                    dismiss()
+                } label: {
+                    Image("back-path-dark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 15)
+                        .foregroundStyle(.textPrimary)
+                }
+                .buttonStyle(.plain)
+                
+                Spacer()
+                
+                Text("Streaks")
+                    .font(.LilitaOne(size: .lg))
+                    .foregroundStyle(.textPrimary)
+                Spacer()
+                
             }
-            .padding()
-            .padding(.bottom, 40)
+            .padding(.horizontal)
+            .padding(.top)
+            MathScrollView(.vertical, showsIndicators: false) {
+                VStack(spacing: 24) {
+                   streakCard
+
+                   StreakStatusCard(
+                        streakCount: streakCount,
+                        activeDates: activeDates
+                   )
+                }
+                .padding()
+            }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(.white)
@@ -65,26 +73,7 @@ struct StreakView: View {
                 tabBarVisible.wrappedValue = true
             }
         }
-        .toolbar {
-            ToolbarItem(placement: .principal) {
-                Text("Streak")
-                    .font(.LilitaOne(size: .md))
-                    .foregroundStyle(.textPrimary)
-            }
-
-            ToolbarItem(placement: .navigationBarLeading) {
-                Button {
-                    dismiss()
-                } label: {
-                    Image("back-path-dark")
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 24, height: 15)
-                        .foregroundStyle(.textPrimary)
-                }
-                .buttonStyle(.plain)
-            }
-        }
+        .toolbar(.hidden, for: .navigationBar)
     }
 
 
@@ -123,4 +112,5 @@ struct StreakView: View {
     NavigationStack {
         StreakView()
     }
+    .modelContainer(for: [SubjectProgress.self, LevelCompletion.self, PracticeDay.self], inMemory: true)
 }

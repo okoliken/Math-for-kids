@@ -21,6 +21,27 @@ extension View {
     func wiggle(trigger: Bool) -> some View {
         modifier(Wiggle(trigger: trigger))
     }
+
+    /// Springy entrance keyed to an external `isActive` flag with an explicit
+    /// `delay`, so a parent can choreograph several elements into a precise,
+    /// hand-tuned sequence (rather than the auto-staggering of `staggeredAppear`).
+    func revealStep(_ isActive: Bool, delay: Double, offsetY: CGFloat = 22) -> some View {
+        modifier(RevealStep(isActive: isActive, delay: delay, offsetY: offsetY))
+    }
+}
+
+private struct RevealStep: ViewModifier {
+    let isActive: Bool
+    let delay: Double
+    let offsetY: CGFloat
+
+    func body(content: Content) -> some View {
+        content
+            .opacity(isActive ? 1 : 0)
+            .scaleEffect(isActive ? 1 : 0.9, anchor: .center)
+            .offset(y: isActive ? 0 : offsetY)
+            .animation(.spring(response: 0.5, dampingFraction: 0.68).delay(delay), value: isActive)
+    }
 }
 
 /// Drives a horizontal shake by oscillating a sine wave as `animatableData`
@@ -78,13 +99,30 @@ private struct StaggeredAppear: ViewModifier {
     }
 }
 
-/// A button style with a springy press bounce — playful, tactile feedback.
-struct BouncyButtonStyle: ButtonStyle {
+/// A button that gives a springy "pop" bounce on every tap — playful, tactile
+/// feedback for icon buttons.
+///
+/// The bounce is driven by the tap *action*, not `ButtonStyle.isPressed`, on
+/// purpose: inside a `ScrollView`, SwiftUI delays flipping `isPressed` to true
+/// so it can tell a tap from a scroll drag, which means an `isPressed`-based
+/// bounce only shows if you press and hold. Firing the pop from the action makes
+/// the feedback play in full on a quick tap, anywhere.
+struct BouncyButton<Label: View>: View {
     var pressedScale: CGFloat = 0.86
+    let action: () -> Void
+    @ViewBuilder var label: () -> Label
 
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .scaleEffect(configuration.isPressed ? pressedScale : 1)
-            .animation(.spring(response: 0.3, dampingFraction: 0.5), value: configuration.isPressed)
+    @State private var popped = false
+
+    var body: some View {
+        Button {
+            // Quick squash, then spring back out — then run the action.
+            withAnimation(.easeIn(duration: 0.08)) { popped = true }
+            withAnimation(.spring(response: 0.3, dampingFraction: 0.5).delay(0.08)) { popped = false }
+            action()
+        } label: {
+            label().scaleEffect(popped ? pressedScale : 1)
+        }
+        .buttonStyle(.plain)
     }
 }

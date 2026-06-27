@@ -5,6 +5,7 @@
 //  Created by Jeffery Okoli on 22/12/2025.
 //
 
+import SwiftData
 import SwiftUI
 
 // MARK: - Store Tab Types
@@ -78,16 +79,19 @@ struct TabItem: View {
 // MARK: - Grid Views
 /// Grid view displaying coin packages with staggered animations
 struct CoinsGridView: View {
+  /// Called with the number of coins to credit when a package is purchased.
+  let onPurchase: (Int) -> Void
+
   let columns = [
     GridItem(.flexible(), spacing: 12),
     GridItem(.flexible(), spacing: 12),
   ]
 
   let coinPackages = [
-    (image: "coins", title: "500 Coins", price: "$1.99"),
-    (image: "coins", title: "1500 Coins", price: "$2.99"),
-    (image: "coins", title: "3000 Coins", price: "$4.99"),
-    (image: "coins", title: "5000 Coins", price: "$7.99"),
+    (image: "coins", title: "500 Coins", price: "$1.99", amount: 500),
+    (image: "coins", title: "1500 Coins", price: "$2.99", amount: 1500),
+    (image: "coins", title: "3000 Coins", price: "$4.99", amount: 3000),
+    (image: "coins", title: "5000 Coins", price: "$7.99", amount: 5000),
   ]
 
   var body: some View {
@@ -98,8 +102,7 @@ struct CoinsGridView: View {
           title: package.title,
           price: package.price
         ) {
-          // Purchase action
-          print("Purchase \(package.title)")
+          onPurchase(package.amount)
         }
         .transition(.scale.combined(with: .opacity))
         .animation(
@@ -259,14 +262,66 @@ struct CoinCard: View {
 
 struct StoreView: View {
   @Environment(\.dismiss) var dismiss
+  @Environment(\.modelContext) private var context
 
   /// Binding to control bottom tab bar visibility from AppRoot
   @Environment(\.tabBarVisible) private var tabBarVisible
 
+  @Query private var wallets: [Wallet]
+
   @State private var selectedTab: StoreTab = .coins
+
+  /// Live coin balance, shown in the header so purchases are visible in place.
+  private var coinBalance: Int { wallets.first?.coins ?? 0 }
+
+  /// Credits a coin purchase to the wallet and plays a confirmation sound.
+  private func purchaseCoins(_ amount: Int) {
+    ProgressStore(context: context).creditCoins(amount)
+    SoundPlayer.shared.play("tick", fallbackSystemSound: 1057)
+  }
 
   var body: some View {
     VStack(spacing: 24) {
+        ZStack {
+            Text("Streaks")
+                .font(.LilitaOne(size: .lg))
+                .foregroundStyle(.textPrimary)
+
+            HStack {
+                Button {
+                    dismiss()
+                } label: {
+                    Image("back-path-dark")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 24, height: 15)
+                        .foregroundStyle(.textPrimary)
+                }
+                .buttonStyle(.plain)
+
+                Spacer()
+
+                // Live coin balance — updates immediately on purchase.
+                HStack(spacing: 6) {
+                    Image("Coin")
+                        .resizable()
+                        .scaledToFit()
+                        .frame(width: 22, height: 22)
+
+                    Text("\(coinBalance.formatted())")
+                        .font(.LilitaOne(size: .sm))
+                        .foregroundStyle(.textPrimary)
+                        .contentTransition(.numericText())
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(.surfacePrimary)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(Color.borderPrimary, lineWidth: 3))
+            }
+        }
+        .padding(.horizontal)
+        .padding(.top)
       TabGroup {
         TabList {
           TabItem(
@@ -296,9 +351,13 @@ struct StoreView: View {
       MathScrollView(.vertical, showsIndicators: false) {
         switch selectedTab {
         case .coins:
-          CoinsGridView()
+          CoinsGridView { amount in
+            withAnimation(.spring(response: 0.4, dampingFraction: 0.8)) {
+              purchaseCoins(amount)
+            }
+          }
             .padding(.horizontal, 20)
-            .padding(.top, 12)
+//            .padding(.top, 12)
             // .padding(.bottom, 100)
             .transition(
               .asymmetric(
@@ -310,7 +369,7 @@ struct StoreView: View {
         case .packs:
           PacksGridView()
             .padding(.horizontal, 20)
-            .padding(.top, 12)
+//            .padding(.top, 12)
             .padding(.bottom, 100)
             .transition(
               .asymmetric(
@@ -342,25 +401,7 @@ struct StoreView: View {
         tabBarVisible.wrappedValue = true
       }
     }
-    .toolbar {
-      ToolbarItem(placement: .principal) {
-        Text("Store")
-          .font(.LilitaOne(size: .md))
-          .foregroundStyle(.textPrimary)
-      }
-
-      ToolbarItem(placement: .navigationBarLeading) {
-        Button {
-          dismiss()
-        } label: {
-          Image("back-path-dark")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 24, height: 15)
-            .foregroundStyle(.textPrimary)
-        }
-      }
-    }
+    .toolbar(.hidden, for: .navigationBar)
   }
 }
 

@@ -35,7 +35,7 @@ struct LevelRow: View {
                     .scaledToFit()
                     .frame(width: 88, height: 32)
             } else if level.isUnlocked {
-                Button(action: action) {
+                BouncyButton(action: action) {
                     ZStack {
                         // Subtle bottom depth.
                         Circle()
@@ -56,7 +56,6 @@ struct LevelRow: View {
                     }
                     .frame(width: 48, height: 48)
                 }
-                .buttonStyle(BouncyButtonStyle())
             } else {
                 Image("lock")
                     .font(.system(size: 22, weight: .semibold))

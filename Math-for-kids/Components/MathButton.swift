@@ -22,7 +22,14 @@ struct MathButton: View {
         } label: {
             Text(label)
         }
-        .buttonStyle(MathButtonBrandStyle(style: brandStyle, fullWidth: fullWidth, minHeight: minHeight, fontSize: fontSize))
+        .buttonStyle(
+            MathButtonBrandStyle(
+                style: brandStyle,
+                fullWidth: fullWidth,
+                minHeight: minHeight,
+                fontSize: fontSize
+            )
+        )
     }
     
 }
@@ -72,6 +79,21 @@ enum ButtonBrandStyle {
             case .secondary:
                 return Color(.borderSecondary)
         }
+    }
+}
+
+/// Lightweight press feedback for icon buttons and navigation links that don't
+/// use `MathButtonBrandStyle` — scales and dims while held, and makes the whole
+/// frame tappable so they're as forgiving to hit as the primary buttons.
+struct PressableButtonStyle: ButtonStyle {
+    var scale: CGFloat = 0.9
+
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .contentShape(Rectangle())
+            .scaleEffect(configuration.isPressed ? scale : 1.0)
+            .opacity(configuration.isPressed ? 0.7 : 1.0)
+            .animation(.spring(response: 0.25, dampingFraction: 0.6), value: configuration.isPressed)
     }
 }
 

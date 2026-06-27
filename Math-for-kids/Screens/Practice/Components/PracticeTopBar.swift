@@ -20,8 +20,9 @@ struct PracticeTopBar: View {
                 Image(systemName: "xmark")
                     .font(.system(size: 22, weight: .bold))
                     .foregroundStyle(.textPrimary)
+                    .frame(width: 44, height: 44)
             }
-            .buttonStyle(.plain)
+            .buttonStyle(PressableButtonStyle())
 
             Spacer()
 
@@ -38,13 +39,15 @@ struct PracticeTopBar: View {
                         .foregroundColor(.green)
                         .font(.title3)
                 }
+                .buttonStyle(PressableButtonStyle())
             }
+            .frame(height: 32)
             .padding(.horizontal, 8)
-            .padding(.vertical, 6)
+//            .padding(.vertical, 6)
             .background(.surfacePrimary)
             .clipShape(Capsule())
             .overlay(
-                Capsule().stroke(Color.borderPrimary, lineWidth: 5)
+                Capsule().stroke(Color.borderPrimary, lineWidth: 3)
             )
         }
         .padding(.horizontal, 20)

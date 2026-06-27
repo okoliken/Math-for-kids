@@ -43,6 +43,7 @@ struct HomeTopBar: View {
                             .foregroundColor(.green)
                             .font(.title3)
                     }
+                    .buttonStyle(PressableButtonStyle())
                 }
                 .padding(.horizontal, 8)
                 .padding(.vertical, 6)

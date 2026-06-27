@@ -9,7 +9,7 @@ import SwiftUI
 
 /// A practice subject (Addition, Subtraction, …) with its theming and progress.
 /// Identity is the title, so it can be used as a navigation value.
-struct Subject: Hashable, Identifiable {
+struct Subject: Identifiable, Hashable {
     let id: String
     var title: String
     var description: String
@@ -60,9 +60,59 @@ struct Subject: Hashable, Identifiable {
         }
     }
 
-    // Identity is the title — Color/ButtonBrandStyle need not be Hashable.
-    static func == (lhs: Subject, rhs: Subject) -> Bool { lhs.id == rhs.id }
-    func hash(into hasher: inout Hasher) { hasher.combine(id) }
+    /// A copy with progress applied — used to merge stored `completedLevels`
+    /// onto the static catalog entry.
+    func withCompletedLevels(_ completed: Int) -> Subject {
+        var copy = self
+        copy.completedLevels = completed
+        return copy
+    }
+
+    // Identity is the title, but equality must also reflect mutable progress:
+    // SwiftUI uses `==` to decide whether a view (e.g. PracticeCard) needs
+    // re-rendering and whether `.onChange` fires. Comparing only `id` would
+    // hide level completions, leaving cards stale after progress changes.
+    static func == (lhs: Subject, rhs: Subject) -> Bool {
+        lhs.id == rhs.id && lhs.completedLevels == rhs.completedLevels
+    }
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
+        hasher.combine(completedLevels)
+    }
+}
+
+extension Subject {
+    /// The fixed set of subjects the app offers. Level progress is layered on
+    /// from `SubjectProgress`; the metadata (theming, totals) lives here.
+    static let catalog: [Subject] = [
+        Subject(
+            title: "Addition",
+            imageName: "brand",
+            surfaceColor: Color(.surfaceBrand),
+            borderLightColor: .borderBrandLight
+        ),
+        Subject(
+            title: "Subtraction",
+            imageName: "lime",
+            surfaceColor: Color(.surfaceLime),
+            borderLightColor: .borderLimeLight,
+            buttonBrandStyle: .lime
+        ),
+        Subject(
+            title: "Multiplication",
+            imageName: "fushia",
+            surfaceColor: Color(.surfaceFushia),
+            borderLightColor: .borderFushiaLight,
+            buttonBrandStyle: .fuchsia
+        ),
+        Subject(
+            title: "Division",
+            imageName: "orange",
+            surfaceColor: Color(.surfaceOrange),
+            borderLightColor: .borderOrangeLight,
+            buttonBrandStyle: .warning
+        ),
+    ]
 }
 
 /// A single level within a subject.

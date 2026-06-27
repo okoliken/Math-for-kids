@@ -15,7 +15,7 @@ struct ProgressBar: View {
     let value: Double
     let fillColor: Color
     let surfaceColor: Color
-
+    let borderColor: Color
     /// Gap between the coloured pill and the track edge.
     /// At the 16pt track height this yields a 12pt fill (16 − 2×2).
     var inset: CGFloat = 2
@@ -33,13 +33,14 @@ struct ProgressBar: View {
             let maxInnerWidth = max(0, width - inset * 2)
             // Keep at least a pill (a full circle) visible at low values.
             let innerWidth = max(innerHeight, maxInnerWidth * clamped)
+            
 
             ZStack(alignment: .leading) {
                 RoundedRectangle(cornerRadius: height / 2)
                     .fill(surfaceColor)
                     .overlay(
                         RoundedRectangle(cornerRadius: height / 2)
-                            .stroke(Color.white, lineWidth: borderWidth)
+                            .stroke(borderColor, lineWidth: borderWidth)
                     )
 
                 RoundedRectangle(cornerRadius: innerHeight / 2)

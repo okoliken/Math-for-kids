@@ -23,7 +23,6 @@ struct HintModal: View {
                 .onTapGesture { onClose() }
 
             sheet
-                .transition(.move(edge: .bottom).combined(with: .opacity))
         }
     }
 

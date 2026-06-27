@@ -5,6 +5,7 @@
 //  Created by Jeffery Okoli on 13/06/2026.
 //
 
+import SwiftData
 import SwiftUI
 
 struct SubjectDetailView: View {
@@ -12,14 +13,29 @@ struct SubjectDetailView: View {
 
     let subject: Subject
 
+    @Query private var progresses: [SubjectProgress]
+
     @State private var playLevel: Level?
+    @State var showPracticeView: Bool = false
 
     /// A started practice run — pushes `PracticeView` once a difficulty is chosen.
     @State private var session: PracticeSession?
 
+    /// Stored progress for this subject, falling back to whatever the catalog carried.
+    private var completedLevels: Int {
+        progresses.first { $0.subjectID == subject.id }?.completedLevels ?? subject.completedLevels
+    }
+
+    /// The subject with live progress applied, so the level ladder unlocks as you go.
+    var liveSubject: Subject {
+        subject.withCompletedLevels(completedLevels)
+    }
+
     var body: some View {
         VStack(spacing: 0) {
-            SubjectDetailHeader(subject: subject)
+            // Use the live subject so the header's level count and progress bar
+            // track completions, matching the level list below.
+            SubjectDetailHeader(subject: liveSubject)
                 .zIndex(1)
 
             ScrollView(showsIndicators: false) {
@@ -34,24 +50,27 @@ struct SubjectDetailView: View {
         .overlay {
             if playLevel != nil {
                 DifficultyModal(
-                    // Cancel returns to the level list — restore the tab bar.
                     onCancel: {
                         playLevel = nil
                         setTabBar(visible: true)
                     },
-                    // Start pushes the practice screen — keep the tab bar hidden
-                    // so it doesn't flash back in behind the push.
                     onStart: { difficulty in
+                        session = PracticeSession(
+                            subject: subject,
+                            difficulty: difficulty,
+                            level: playLevel?.number ?? liveSubject.currentLevel
+                        )
                         playLevel = nil
-                        session = PracticeSession(subject: subject, difficulty: difficulty)
+                        showPracticeView = true
                     }
                 )
             }
         }
-        .navigationDestination(item: $session) { session in
-            PracticeView(subject: session.subject, difficulty: session.difficulty)
+        .fullScreenCover(isPresented: $showPracticeView){
+            if let session = session {
+                PracticeView(subject: session.subject, difficulty: session.difficulty, level: session.level)
+            }
         }
-        .animation(.spring(response: 0.5, dampingFraction: 0.62), value: playLevel)
     }
 
     /// Animated tab-bar visibility toggle, matching the rest of the app.
@@ -64,10 +83,9 @@ struct SubjectDetailView: View {
     // MARK: - Levels List
     private var levelsList: some View {
         VStack(spacing: 12) {
-            ForEach(Array(subject.levels.enumerated()), id: \.element.id) { index, level in
+            ForEach(Array(liveSubject.levels.enumerated()), id: \.element.id) { index, level in
                 LevelRow(level: level, brandStyle: subject.buttonBrandStyle) {
                     playLevel = level
-                    // Tuck the tab bar away so the difficulty modal covers cleanly.
                     setTabBar(visible: false)
                 }
                 .staggeredAppear(index)
@@ -88,4 +106,5 @@ struct SubjectDetailView: View {
             )
         )
     }
+    .modelContainer(for: [SubjectProgress.self, LevelCompletion.self, PracticeDay.self], inMemory: true)
 }
